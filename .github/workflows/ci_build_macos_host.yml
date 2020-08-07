@@ -1,0 +1,36 @@
+name: Mac OSX host system
+
+on:
+  push:
+  pull_request:
+
+env:
+  DISTRO_PACKAGE: application 
+
+
+jobs:
+
+  macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-python@v1
+      with:
+        python-version: '3.x'
+    - run: brew install gcc
+    - run: pip install meson ninja
+    - run: meson setup build -Dwith_tests=true
+      env:
+        CXX: g++
+    - run: meson test -C build -v
+    - uses: actions/upload-artifact@v2
+      if: failure()
+      with:
+        name: MacOS_Meson_Testlog
+        path: build/meson-logs/testlog.txt
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-macos-host
+        path: ./build/meson-out/

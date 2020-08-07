@@ -1,0 +1,36 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+
+[*.[ch]]
+indent_size = 4
+
+[*.c]
+indent_size = 4
+
+[*.cc]
+indent_size = 4
+
+[*.h]
+indent_size = 4
+
+[*.py]
+indent_size = 4
+
+[*.java]
+indent_size = 4
+
+[*.rs]
+indent_size = 4
+
+[meson_options.txt]
+indent_size = 4
+
+[meson.build]
+indent_size = 4
+
+[*.json]
+indent_size = 2

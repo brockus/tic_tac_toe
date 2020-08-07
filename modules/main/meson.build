@@ -1,0 +1,1 @@
+executable('prog', files('main.cc'), dependencies: [code_dep])

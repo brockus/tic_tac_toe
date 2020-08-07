@@ -1,0 +1,186 @@
+name: Linux Distro Builder
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+  # Run tests for any PRs.
+  pull_request:
+
+env:
+  DISTRO_ATHOR: michaelbrockus
+  DISTRO_PACKAGE: application 
+
+jobs:
+
+
+  ci_build_distro_ubuntu:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Pull Docker image
+      run: docker pull "docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/ubuntu-ci-sys:latest"
+
+    - name: Run image
+      run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/ubuntu-ci-sys:latest
+
+    - name: Setup and Test project
+      run: docker exec builder bash -c 'meson setup build && meson compile -C build'
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-ubuntu-host
+        path: ./build/meson-out/
+
+
+
+  ci_build_distro_debian:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Pull Docker image
+      run: docker pull "docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/debian-ci-sys:latest"
+
+    - name: Run image
+      run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/debian-ci-sys:latest
+
+    - name: Setup and Test project
+      run: docker exec builder bash -c 'meson setup build && meson compile -C build'
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-debian-host
+        path: ./build/meson-out/
+
+
+
+  ci_build_distro_fedora:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Pull Docker image
+      run: docker pull "docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/fedora-ci-sys:latest"
+
+    - name: Run image
+      run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/fedora-ci-sys:latest
+
+    - name: Setup and Test project
+      run: docker exec builder bash -c 'meson setup build && meson compile -C build'
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-fedora-host
+        path: ./build/meson-out/
+
+
+
+  ci_build_distro_archlinux:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Pull Docker image
+      run: docker pull "docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/arch-ci-sys:latest"
+
+    - name: Run image
+      run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/arch-ci-sys:latest
+
+    - name: Setup and Test project
+      run: docker exec builder bash -c 'meson setup build && meson compile -C build'
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-archlinux-host
+        path: ./build/meson-out/
+
+
+
+  ci_build_distro_opensuse:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Pull Docker image
+      run: docker pull "docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/opensuse-ci-sys:latest"
+
+    - name: Run image
+      run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/opensuse-ci-sys:latest
+
+    - name: Setup and Test project
+      run: docker exec builder bash -c 'meson setup build && meson compile -C build'
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-opensuse-host
+        path: ./build/meson-out/
+
+
+  ci_build_distro_centos:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Docker login
+      run: docker login docker.pkg.github.com -u $GITHUB_ACTOR -p $GITHUB_TOKEN
+      env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    - name: Pull Docker image
+      run: docker pull "docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/centos-ci-sys:latest"
+
+    - name: Run image
+      run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/${{ env.DISTRO_ATHOR }}/centos-ci-sys:latest
+
+    - name: Setup and Test project
+      run: docker exec builder bash -c 'meson setup build && meson compile -C build'
+
+    - name: Upload package
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ env.DISTRO_PACKAGE }}-centos-host
+        path: ./build/meson-out/

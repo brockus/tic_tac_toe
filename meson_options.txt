@@ -1,0 +1,4 @@
+option('with_tests',
+    type : 'boolean',
+    value : 'false',
+    description : 'enable unit testing for this project')
