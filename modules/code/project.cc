@@ -1,5 +1,5 @@
 /*
- * file: project.c
+ * file: project.cc
  * author: Michael Brockus
  * gmail: <michaelbrockus@gmail.com>
  */
