@@ -4,18 +4,7 @@
  * gmail: <michaelbrockus@gmail.com>
  */
 #include <unity.h>
-
-/*
- * This function is called from project.c
- */
-extern const char *greet();
-
-/*
- *  Prototype functions from the external test file.
- */
-void test_simpleAssertTrue();
-void test_simpleAssertNull();
-void test_simpleAssertCall();
+#include "project.h"
 
 /*
  *  Functions for setup and teardown.
@@ -23,24 +12,21 @@ void test_simpleAssertCall();
 void setUp()
 {
     // TODO.
-} //end of function setUp
+} // end of function setUp
 
 void tearDown()
 {
     // TODO.
-} //end of function tearDown
+} // end of function tearDown
 
-void test_simpleAssertTrue()
+void test_validGridChar()
 {
-    TEST_ASSERT_TRUE(true);
-} //end of test case
+    TEST_ASSERT_EQUAL_CHAR('X', gridChar(-1));
+    TEST_ASSERT_EQUAL_CHAR(' ', gridChar(0));
+    TEST_ASSERT_EQUAL_CHAR('O', gridChar(1));
+} // end of test case
 
-void test_simpleAssertNull()
+void test_invalidGridChar()
 {
-    TEST_ASSERT_NULL(NULL);
-} //end of test case
-
-void test_simpleAssertCall()
-{
-    TEST_ASSERT_EQUAL_STRING("Hello, C++ Developer.", greet());
-} //end of test case
+    TEST_ASSERT_EQUAL_CHAR('\0', gridChar(42));
+} // end of test case

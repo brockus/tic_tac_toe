@@ -1,13 +1,15 @@
-# C++ Project
+# Tic Tac Toe
 
-![Mac OSX host system](https://github.com/michaelbrockus/cpp_project_template/workflows/Mac%20OSX%20host%20system/badge.svg)
-![Windows 10 host system](https://github.com/michaelbrockus/cpp_project_template/workflows/Windows%2010%20host%20system/badge.svg)
-![Linux host system](https://github.com/michaelbrockus/cpp_project_template/workflows/Linux%20host%20system/badge.svg)
-![Linux Distro Builder](https://github.com/michaelbrockus/cpp_project_template/workflows/Linux%20Distro%20Builder/badge.svg)
+![Mac OSX host system](https://github.com/michaelbrockus/tic_tac_toe/workflows/Mac%20OSX%20host%20system/badge.svg)
+![Windows 10 host system](https://github.com/michaelbrockus/tic_tac_toe/workflows/Windows%2010%20host%20system/badge.svg)
+![Linux host system](https://github.com/michaelbrockus/tic_tac_toe/workflows/Linux%20host%20system/badge.svg)
+![Linux Distro Builder](https://github.com/michaelbrockus/tic_tac_toe/workflows/Linux%20Distro%20Builder/badge.svg)
 
 ## About
 
-Please add relevant information about your application.
+Welcome to Tic Tac Tow the game. Player vs harmless dodo bird. This game
+features a player trying to win a game over a dodo bird, except little
+the player knows that the Dodo bird is a robot.
 
 ## Setup and Compile
 ------------------------------------------------
@@ -25,6 +27,8 @@ configured Meson project, this can be done with the following:
 ```console
 meson compile -C <<builddir name>>
 ```
+
+To run the game just run `tictacdodo`.
 
 ## Contact the developer
 ------------------------------------------------

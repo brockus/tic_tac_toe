@@ -1,4 +1,4 @@
-project('app', 'cpp',
+project('Tic Tac Toe', 'cpp',
     meson_version : '>=0.55.0',
     version : '0.1.0',
     license : 'apache-2.0',

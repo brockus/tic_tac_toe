@@ -6,14 +6,11 @@
 #include <cstdio>
 #include <cstdlib>
 
-extern const char *greet(void);
+#include "project.h"
 
-/*
- * This source code demonstrates a simple hello world program where the message
- * printed is "Hello, C++ Developer" displayed to the standard output console.
- */
+// main is where program execution starts
 int main()
 {
-    puts(greet());
+    mainExecution();
     return EXIT_SUCCESS;
 } // end of function main

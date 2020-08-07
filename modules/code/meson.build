@@ -1,4 +1,5 @@
 code_lib = library('code-lib', files('project.cc'),
+    cpp_args : '-DBUILDING_PROJECT',
     include_directories: include_directories('.'))
 
 code_dep = declare_dependency(
