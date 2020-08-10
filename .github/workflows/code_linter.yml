@@ -23,4 +23,4 @@ jobs:
       run: docker run -it -d --name builder -v $GITHUB_WORKSPACE:/workspace -w /workspace docker.pkg.github.com/michaelbrockus/ubuntu-ci-sys:latest
 
     - name: Setup, Test and Linter
-      run: docker exec builder bash -c 'meson setup build && meson compile -C build && cppcheck --project=build/compile_commands.json'
+      run: docker exec builder bash -c 'CXX=g++ meson setup build && meson compile -C build && cppcheck --project=build/compile_commands.json'
