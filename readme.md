@@ -28,7 +28,7 @@ configured Meson project, this can be done with the following:
 meson compile -C <<builddir name>>
 ```
 
-To run the game just run `tictacdodo`.
+To run the game just run `dodo`.
 
 ## Contact the developer
 ------------------------------------------------

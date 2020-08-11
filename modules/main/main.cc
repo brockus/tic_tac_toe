@@ -4,7 +4,6 @@
  * gmail: <michaelbrockus@gmail.com>
  */
 #include <cstdio>
-#include <cstdlib>
 
 #include "project.h"
 

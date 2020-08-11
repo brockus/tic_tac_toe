@@ -3,194 +3,304 @@
  * author: Michael Brockus
  * gmail: <michaelbrockus@gmail.com>
  */
-
-/*
- Greet the user
- */
 #include "project.h"
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
 
-enum
+// All possible winning states
+std::vector<std::vector<std::pair<int, int>>> winningStates
 {
-    MARK_X = -1,
-    MARK_O = 1,
-    MARK_EMPTY = 0
-}; // end enum
+    // Every row
+    { std::make_pair(0, 0), std::make_pair(0, 1), std::make_pair(0, 2) },
+    { std::make_pair(1, 0), std::make_pair(1, 1), std::make_pair(1, 2) },
+    { std::make_pair(2, 0), std::make_pair(2, 1), std::make_pair(2, 2) },
 
-struct Position
-{
-    int pos;
+    // Every column
+    { std::make_pair(0, 0), std::make_pair(1, 0), std::make_pair(2, 0) },
+    { std::make_pair(0, 1), std::make_pair(1, 1), std::make_pair(2, 1) },
+    { std::make_pair(0, 2), std::make_pair(1, 2), std::make_pair(2, 2) },
 
-}; // end of struct Position
+    // Every diagonal
+    { std::make_pair(0, 0), std::make_pair(1, 1), std::make_pair(2, 2) },
+    { std::make_pair(2, 0), std::make_pair(1, 1), std::make_pair(0, 2) }
+};
 
 //
-// Show grid char on the game board
+// Get all available legal moves (spaces that are not occupied)
 //
-char gridChar(int index)
+std::vector<std::pair<int, int>> getLegalMoves(char board[3][3])
 {
-    switch (index)
+    std::vector<std::pair<int, int>> legalMoves;
+    for (int index = 0; index < 3; ++index)
     {
-    case MARK_X:
-        return 'X';
-    case MARK_EMPTY:
-        return ' ';
-    case MARK_O:
-        return 'O';
-    } // end switch
-    return '\0';
-} // end of function gridChar
-
-//
-// Output the game board to the player
-//
-void draw(int *board)
-{
-    std::cout << std::endl
-    << " " << gridChar(board[0]) << " | " << gridChar(board[1]) << " | " << gridChar(board[2]) << " " << std::endl
-    << "---+---+---" << std::endl
-    << " " << gridChar(board[3]) << " | " << gridChar(board[4]) << " | " << gridChar(board[5]) << " " << std::endl
-    << "---+---+---" << std::endl
-    << " " << gridChar(board[6]) << " | " << gridChar(board[7]) << " | " << gridChar(board[8]) << " " << std::endl
-    << "---+---+---" << std::endl;
-} // end of function draw
-
-//
-// Determines if a player has won, returns 0 otherwise.
-//
-int win(const int *board)
-{
-    unsigned int wins[8][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6}};
-    for (unsigned int index = 0; index < 8; ++index)
-    {
-        if (board[wins[index][0]] != 0 && board[wins[index][0]] == board[wins[index][1]] && board[wins[index][0]] == board[wins[index][2]])
+        for (int subIndex = 0; subIndex < 3; ++subIndex)
         {
-            return board[wins[index][2]];
+            if (board[index][subIndex] != AI_MARKER && board[index][subIndex] != PLAYER_MARKER)
+            {
+                legalMoves.push_back(std::make_pair(index, subIndex));
+            } // end if
+        } // end for
+    } // end for
+
+    return legalMoves;
+} // end of function getLegalMoves
+
+//
+// Check if a position is occupied
+//
+bool positionOccupied(char board[3][3], std::pair<int, int> pos)
+{
+    std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
+
+    for (int index = 0; index < legalMoves.size(); ++index)
+    {
+        if (pos.first == legalMoves[index].first && pos.second == legalMoves[index].second)
+        {
+            return false;
         } // end if
     } // end for
-    return 0;
-} // end of function win
+
+    return true;
+} // end of function positionOccupied
 
 //
-// How is the position like for player (their turn) on board?
+// Get all board positions occupied by the given marker
 //
-int minimax(int *board, int player)
+std::vector<std::pair<int, int>> getOccupiedPositions(char board[3][3], char marker)
 {
-    int winner = win(board);
-    if (winner != 0)
+    std::vector<std::pair<int, int>> occupiedPositions;
+
+    for (int index = 0; index < 3; ++index)
     {
-        return winner * player;
+        for (int subIndex = 0; subIndex < 3; ++subIndex)
+        {
+            if (marker == board[index][subIndex])
+            {
+                occupiedPositions.push_back(std::make_pair(index, subIndex));
+            } // end if
+        } // end for
+    } // end for
+
+    return occupiedPositions;
+} // end of function getOccupiedPositions
+
+//
+// Check if the board is full
+//
+bool boardIsFull(char board[3][3])
+{
+    std::vector<std::pair<int, int>> legal_moves = getLegalMoves(board);
+
+    if (0 == legal_moves.size())
+    {
+        return true;
+    } // end if
+    else
+    {
+        return false;
+    } // end else
+} // end of function boardIsFull
+
+//
+// Check if the game has been won
+//
+bool gameIsWon(std::vector<std::pair<int, int>> occupiedPositions)
+{
+    bool game_won;
+
+    for (int i = 0; i < winningStates.size(); i++)
+    {
+        game_won = true;
+        std::vector<std::pair<int, int>> curr_win_state = winningStates[i];
+        for (int j = 0; j < 3; j++)
+        {
+            if (!(std::find(std::begin(occupiedPositions),
+                std::end(occupiedPositions), curr_win_state[j]) != std::end(occupiedPositions)))
+            {
+                game_won = false;
+                break;
+            } // end if
+        } // end for
+
+        if (game_won)
+        {
+            break;
+        } // end if
+    } // end for
+    return game_won;
+} // end of function gameIsWon
+
+//
+// get the opponent marker char
+//
+char getOpponentMarker(char marker)
+{
+    char opponentMarker;
+    if (marker == PLAYER_MARKER)
+    {
+        opponentMarker = AI_MARKER;
+    } // end if
+    else
+    {
+        opponentMarker = PLAYER_MARKER;
+    } // end else
+
+    return opponentMarker;
+} // end of function getOpponentMarker
+
+//
+// Check if someone has won or lost
+//
+int getBoardState(char board[3][3], char marker)
+{
+
+    char opponentMarker = getOpponentMarker(marker);
+
+    std::vector<std::pair<int, int>> occupiedPositions = getOccupiedPositions(board, marker);
+
+    if (gameIsWon(occupiedPositions))
+    {
+        return static_cast<int>(State::WIN);
     } // end if
 
-    int move = -1;
-    int score = -2; // Losing moves are preferred to no move
+    occupiedPositions = getOccupiedPositions(board, opponentMarker);
 
-    for (unsigned int index = 0; index < 9; ++index)
-    { 
-        // For all moves,
-        if (*(board + index) == 0)
-        {
-            *(board + index) = player; // Try the move
-            int thisScore = -minimax(board, player * -1);
-            if (thisScore > score)
-            {
-                // Pick the one that's worst for the opponent
-                score = thisScore;
-                move = index;
-            } // end if
-            *(board + index) = 0; // Reset board after try
-        } // end if
-    } // end for
-    if (move == -1)
+    if (gameIsWon(occupiedPositions))
     {
-        return 0;
+        return static_cast<int>(State::LOSS);
     } // end if
-    return score;
-} // end of function minimax
 
-//
-// should perform a move for the computer
-//
-void computerMove(int *board)
-{
-
-    struct Position bestPos;
-    bestPos.pos = -1;
-    int score = -2;
-    for (unsigned int index = 0; index < 9; ++index)
+    if (boardIsFull(board))
     {
-        if (board[index] == 0)
+        return static_cast<int>(State::DRAW);
+    } // end if
+
+    return static_cast<int>(State::DRAW);
+} // end of function getBoardState
+
+//
+// Apply the minimax game optimization algorithm
+//
+std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char marker, int depth, int alpha, int beta)
+{
+    // Initialize best move
+    std::pair<int, int> bestMove = std::make_pair(-1, -1);
+    int bestScore = (marker == AI_MARKER) ? static_cast<char>(State::LOSS) : static_cast<char>(State::WIN);
+
+    // If we hit a terminal state (leaf node), return the best score and move
+    if (boardIsFull(board) || static_cast<int>(State::DRAW) != getBoardState(board, AI_MARKER))
+    {
+        bestScore = getBoardState(board, AI_MARKER);
+        return std::make_pair(bestScore, bestMove);
+    } // end if
+
+    std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
+
+    for (int index = 0; index < legalMoves.size(); ++index)
+    {
+        std::pair<int, int> currMove = legalMoves[index];
+        board[currMove.first][currMove.second] = marker;
+
+        // Maximizing player's turn
+        if (marker == AI_MARKER)
         {
-            *(board + index) = 1;
-            int tempScore = -minimax(board, -1);
-            *(board + index) = 0;
-            if (tempScore > score)
+            int score = minimaxOptimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
+
+            // Get the best scoring move
+            if (bestScore < score)
             {
-                score = tempScore;
-                bestPos.pos = index;
-            } // end if
-        } // end if
-    } // end for
+                bestScore = score - depth * 10;
+                bestMove = currMove;
 
-    // returns a score based on minimax tree at a given node.
-    *(board + bestPos.pos) = 1;
-} // end of function computerMove
+                // Check if this branch's best move is worse than the best
+                // option of a previously search branch. If it is, skip it
+                alpha = std::max(alpha, bestScore);
+                board[currMove.first][currMove.second] = EMPTY_SPACE;
+                if (beta <= alpha)
+                {
+                    break;
+                }  // end if
+            }  // end if
 
-//
-// should perform a move for the player
-//
-void playerMove(int *board)
-{
-    int move = 0;
-    do
-    {
-        std::cout << std::endl << "Input move ([0..8]): ";
-        std::cin >> move;
-        if (*(board + move) != 0)
+        }  // end if 
+        else // Minimizing opponent's turn
         {
-            std::cout << "Its Already Occupied!" << std::endl;
-        } // end if
-        std::cout << std::endl;
-    } while ((move >= 9 || move < 0) && (*(board + move) == 0 && *(board + move)) != 0);
-    board[move] = -1;
-} // end of function playerMove
+            int score = minimaxOptimization(board, AI_MARKER, depth + 1, alpha, beta).first;
+
+            if (bestScore > score)
+            {
+                bestScore = score + depth * 10;
+                bestMove = currMove;
+
+                // Check if this branch's best move is worse than the best
+                // option of a previously search branch. If it is, skip it
+                beta = std::min(beta, bestScore);
+                board[currMove.first][currMove.second] = EMPTY_SPACE;
+                if (beta <= alpha)
+                {
+                    break;
+                } // end if
+            } // end if
+        } // end else
+
+        board[currMove.first][currMove.second] = EMPTY_SPACE; // Undo move
+    } // end for
+    return std::make_pair(bestScore, bestMove);
+} // end of function minimaxOptimization
+
+//
+// Check if the game is finished
+//
+const bool gameIsDone(char board[3][3])
+{
+    if (boardIsFull(board))
+    {
+        return true;
+    } // end if
+
+    if (static_cast<int>(State::DRAW) != getBoardState(board, AI_MARKER))
+    {
+        return true;
+    } // end if
+
+    return false;
+}
 
 //
 // game main execution logic starts here
 //
 void mainExecution()
 {
-    int board[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-    unsigned int player = 0;
+    char board[3][3] = { { EMPTY_SPACE } };
+    std::cout << "********************************\n\n\tTic Tac Toe Dodo\n\n********************************" << std::endl << std::endl;
+    std::cout << "Player = X\t Dodo = O" << std::endl << std::endl;
 
-    // computer squares are 1, player squares are -1.
-    std::cout << "Dodo bird: O, You: X" << std::endl << "Play (1)st or (2)nd? ";
-    std::cin >> player;
-    std::cout << std::endl;
-    for (unsigned int turn = 0; turn < 9 && !win(board); ++turn)
+    while (!gameIsDone(board))
     {
-        if ((turn + player) % 2 == 0)
+        int row, col;
+        std::cout << "Row play: ";
+        std::cin >> row;
+        std::cout << "Col play: ";
+        std::cin >> col;
+        std::cout << std::endl << std::endl;
+
+        if (positionOccupied(board, std::make_pair(row, col)))
         {
-            computerMove(board);
+            std::cout << "The position (" << row << ", " << col << ") is occupied. Try another one..." << std::endl;
+            continue;
         } // end if
         else
         {
-            draw(board);
-            playerMove(board);
+            board[row][col] = PLAYER_MARKER;
         } // end else
-    } // end for
-    switch (win(board))
-    {
-    case 0:
-        std::cout << "A draw." << std::endl;
-        break;
-    case 1:
-        draw(board);
-        std::cout << "You lose." << std::endl;
-        break;
-    case -1:
-        std::cout << "You win." << std::endl;
-        break;
-    } // end switch
+
+        std::pair<int, std::pair<int, int>> aiMove = minimaxOptimization(board, AI_MARKER, START_DEPTH,
+            static_cast<int>(State::LOSS), static_cast<int>(State::WIN));
+
+        board[aiMove.second.first][aiMove.second.second] = AI_MARKER;
+
+        printPoard(board);
+    } // end while
+
+    std::cout << "********** GAME OVER **********" << std::endl << std::endl;
+    int playerState = getBoardState(board, PLAYER_MARKER);
+    std::cout << "PLAYER "; printGameState(playerState);
 } // end of function mainExecution

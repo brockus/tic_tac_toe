@@ -15,7 +15,7 @@ extern void tearDown();
  *  Prototype functions from the external test file.
  */
 extern void test_validGridChar();
-extern void test_invalidGridChar();
+extern void test_validOpponentMarker();
 
 /*
  *  This function runs test from the external test
@@ -26,7 +26,7 @@ int main()
     UNITY_BEGIN();
 
     RUN_TEST(test_validGridChar);
-    RUN_TEST(test_invalidGridChar);
+    RUN_TEST(test_validOpponentMarker);
 
     return UNITY_END();
 } //end of function main

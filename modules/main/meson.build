@@ -1,1 +1,1 @@
-executable('tictacdodo', files('main.cc'), dependencies: [code_dep])
+executable('dodo', files('main.cc'), dependencies: [code_dep])

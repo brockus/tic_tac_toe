@@ -1,4 +1,4 @@
-code_lib = library('code-lib', files('project.cc'),
+code_lib = library('code-lib', files('project.cc', 'messages.cc'),
     cpp_args : '-DBUILDING_PROJECT',
     include_directories: include_directories('.'))
 
