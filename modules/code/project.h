@@ -19,6 +19,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cstdlib>
 
 enum class State
 {
