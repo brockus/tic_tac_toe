@@ -50,7 +50,7 @@ bool positionOccupied(char board[3][3], std::pair<int, int> pos)
 {
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
 
-    for (int index = 0; index < legalMoves.size(); ++index)
+    for (auto index = 0; index < legalMoves.size(); ++index)
     {
         if (pos.first == legalMoves[index].first && pos.second == legalMoves[index].second)
         {
@@ -68,7 +68,7 @@ std::vector<std::pair<int, int>> getOccupiedPositions(char board[3][3], char mar
 {
     std::vector<std::pair<int, int>> occupiedPositions;
 
-    for (int index = 0; index < 3; ++index)
+    for (auto index = 0; index < 3; ++index)
     {
         for (int subIndex = 0; subIndex < 3; ++subIndex)
         {
