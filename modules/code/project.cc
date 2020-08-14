@@ -202,7 +202,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
         // Maximizing player's turn
         if (marker == AI_MARKER)
         {
-            size_t score = minimaxOptimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
+            int score = minimaxOptimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
 
             // Get the best scoring move
             if (bestScore < score)
