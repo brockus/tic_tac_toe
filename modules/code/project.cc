@@ -29,9 +29,9 @@ std::vector<std::vector<std::pair<int, int>>> winningStates
 std::vector<std::pair<int, int>> getLegalMoves(char board[3][3])
 {
     std::vector<std::pair<int, int>> legalMoves;
-    for (int index = 0; index < 3; ++index)
+    for (size_t index = 0; index < 3; ++index)
     {
-        for (int subIndex = 0; subIndex < 3; ++subIndex)
+        for (size_t subIndex = 0; subIndex < 3; ++subIndex)
         {
             if (board[index][subIndex] != AI_MARKER && board[index][subIndex] != PLAYER_MARKER)
             {
@@ -50,7 +50,7 @@ bool positionOccupied(char board[3][3], std::pair<int, int> pos)
 {
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
 
-    for (int index = 0; index < legalMoves.size(); ++index)
+    for (size_t index = 0; index < legalMoves.size(); ++index)
     {
         if (pos.first == legalMoves[index].first && pos.second == legalMoves[index].second)
         {
@@ -68,9 +68,9 @@ std::vector<std::pair<int, int>> getOccupiedPositions(char board[3][3], char mar
 {
     std::vector<std::pair<int, int>> occupiedPositions;
 
-    for (int index = 0; index < 3; ++index)
+    for (size_t index = 0; index < 3; ++index)
     {
-        for (int subIndex = 0; subIndex < 3; ++subIndex)
+        for (size_t subIndex = 0; subIndex < 3; ++subIndex)
         {
             if (marker == board[index][subIndex])
             {
@@ -106,7 +106,7 @@ bool gameIsWon(std::vector<std::pair<int, int>> occupiedPositions)
 {
     bool game_won;
 
-    for (int i = 0; i < winningStates.size(); i++)
+    for (size_t i = 0; i < winningStates.size(); i++)
     {
         game_won = true;
         std::vector<std::pair<int, int>> curr_win_state = winningStates[i];
@@ -194,7 +194,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
 
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
 
-    for (int index = 0; index < legalMoves.size(); ++index)
+    for (size_t index = 0; index < legalMoves.size(); ++index)
     {
         std::pair<int, int> currMove = legalMoves[index];
         board[currMove.first][currMove.second] = marker;
@@ -202,7 +202,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
         // Maximizing player's turn
         if (marker == AI_MARKER)
         {
-            int score = minimaxOptimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
+            size_t score = minimaxOptimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
 
             // Get the best scoring move
             if (bestScore < score)
@@ -223,7 +223,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
         }  // end if 
         else // Minimizing opponent's turn
         {
-            int score = minimaxOptimization(board, AI_MARKER, depth + 1, alpha, beta).first;
+            size_t score = minimaxOptimization(board, AI_MARKER, depth + 1, alpha, beta).first;
 
             if (bestScore > score)
             {
