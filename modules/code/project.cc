@@ -35,7 +35,7 @@ std::vector<std::pair<int, int>> getLegalMoves(char board[3][3])
         {
             if (board[index][subIndex] != AI_MARKER && board[index][subIndex] != PLAYER_MARKER)
             {
-                legalMoves.push_back(std::make_pair(index, subIndex));
+                legalMoves.push_back({index, subIndex});
             } // end if
         } // end for
     } // end for
@@ -74,7 +74,7 @@ std::vector<std::pair<int, int>> getOccupiedPositions(char board[3][3], char mar
         {
             if (marker == board[index][subIndex])
             {
-                occupiedPositions.push_back(std::make_pair(index, subIndex));
+                occupiedPositions.push_back({index, subIndex});
             } // end if
         } // end for
     } // end for
@@ -182,14 +182,14 @@ int getBoardState(char board[3][3], char marker)
 std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char marker, int depth, int alpha, int beta)
 {
     // Initialize best move
-    std::pair<int, int> bestMove = std::make_pair(-1, -1);
+    std::pair<int, int> bestMove = {-1, -1};
     int bestScore = (marker == AI_MARKER) ? static_cast<char>(State::LOSS) : static_cast<char>(State::WIN);
 
     // If we hit a terminal state (leaf node), return the best score and move
     if (boardIsFull(board) || static_cast<int>(State::DRAW) != getBoardState(board, AI_MARKER))
     {
         bestScore = getBoardState(board, AI_MARKER);
-        return std::make_pair(bestScore, bestMove);
+        return {bestScore, bestMove};
     } // end if
 
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
@@ -243,7 +243,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
 
         board[currMove.first][currMove.second] = EMPTY_SPACE; // Undo move
     } // end for
-    return std::make_pair(bestScore, bestMove);
+    return {bestScore, bestMove};
 } // end of function minimaxOptimization
 
 //
@@ -282,7 +282,7 @@ void mainExecution()
         std::cin >> col;
         std::cout << std::endl << std::endl;
 
-        if (positionOccupied(board, std::make_pair(row, col)))
+        if (positionOccupied(board, {row, col}))
         {
             std::cout << "The position (" << row << ", " << col << ") is occupied. Try another one..." << std::endl;
             continue;
