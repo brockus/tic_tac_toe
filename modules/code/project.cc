@@ -26,7 +26,7 @@ std::vector<std::vector<std::pair<int, int>>> winningStates
 //
 // Get all available legal moves (spaces that are not occupied)
 //
-std::vector<std::pair<int, int>> getLegalMoves(char board[3][3])
+std::vector<std::pair<int, int>> getLegalMoves(std::array<std::array<char, 3>, 3> board)
 {
     std::vector<std::pair<int, int>> legalMoves;
     for (size_t index = 0; index < 3; ++index)
@@ -46,7 +46,7 @@ std::vector<std::pair<int, int>> getLegalMoves(char board[3][3])
 //
 // Check if a position is occupied
 //
-bool positionOccupied(char board[3][3], std::pair<int, int> pos)
+bool positionOccupied(std::array<std::array<char, 3>, 3> board, std::pair<int, int> pos)
 {
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
 
@@ -64,7 +64,7 @@ bool positionOccupied(char board[3][3], std::pair<int, int> pos)
 //
 // Get all board positions occupied by the given marker
 //
-std::vector<std::pair<int, int>> getOccupiedPositions(char board[3][3], char marker)
+std::vector<std::pair<int, int>> getOccupiedPositions(std::array<std::array<char, 3>, 3> board, char marker)
 {
     std::vector<std::pair<int, int>> occupiedPositions;
 
@@ -85,7 +85,7 @@ std::vector<std::pair<int, int>> getOccupiedPositions(char board[3][3], char mar
 //
 // Check if the board is full
 //
-bool boardIsFull(char board[3][3])
+bool boardIsFull(std::array<std::array<char, 3>, 3> board)
 {
     std::vector<std::pair<int, int>> legal_moves = getLegalMoves(board);
 
@@ -149,7 +149,7 @@ char getOpponentMarker(char marker)
 //
 // Check if someone has won or lost
 //
-int getBoardState(char board[3][3], char marker)
+int getBoardState(std::array<std::array<char, 3>, 3> board, char marker)
 {
 
     char opponentMarker = getOpponentMarker(marker);
@@ -179,7 +179,7 @@ int getBoardState(char board[3][3], char marker)
 //
 // Apply the minimax game optimization algorithm
 //
-std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char marker, int depth, int alpha, int beta)
+std::pair<int, std::pair<int, int>> minimaxOptimization(std::array<std::array<char, 3>, 3> board, char marker, int depth, int alpha, int beta)
 {
     // Initialize best move
     std::pair<int, int> bestMove = std::make_pair(-1, -1);
@@ -249,7 +249,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
 //
 // Check if the game is finished
 //
-const bool gameIsDone(char board[3][3])
+const bool gameIsDone(std::array<std::array<char, 3>, 3> board)
 {
     if (boardIsFull(board))
     {
@@ -269,7 +269,12 @@ const bool gameIsDone(char board[3][3])
 //
 void mainExecution()
 {
-    char board[3][3] = { { EMPTY_SPACE } };
+    std::array<std::array<char, 3>, 3> board = {{
+        { EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+
     std::cout << "********************************\n\n\tTic Tac Toe Dodo\n\n********************************" << std::endl << std::endl;
     std::cout << "Player = X\t Dodo = O" << std::endl << std::endl;
 
