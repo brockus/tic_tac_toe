@@ -241,7 +241,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(char board[3][3], char m
             } // end if
         } // end else
 
-        board[currMove.first][currMove.second] = EMPTY_SPACE; // Undo move
+        // board[currMove.first][currMove.second] = EMPTY_SPACE; // Undo move
     } // end for
     return std::make_pair(bestScore, bestMove);
 } // end of function minimaxOptimization
