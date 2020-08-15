@@ -9,18 +9,18 @@
 std::vector<std::vector<std::pair<int, int>>> winningStates
 {
     // Every row
-    { std::make_pair(0, 0), std::make_pair(0, 1), std::make_pair(0, 2) },
-    { std::make_pair(1, 0), std::make_pair(1, 1), std::make_pair(1, 2) },
-    { std::make_pair(2, 0), std::make_pair(2, 1), std::make_pair(2, 2) },
+    { {0, 0}, {0, 1}, {0, 2} },
+    { {1, 0}, {1, 1}, {1, 2} },
+    { {2, 0}, {2, 1}, {2, 2} },
 
     // Every column
-    { std::make_pair(0, 0), std::make_pair(1, 0), std::make_pair(2, 0) },
-    { std::make_pair(0, 1), std::make_pair(1, 1), std::make_pair(2, 1) },
-    { std::make_pair(0, 2), std::make_pair(1, 2), std::make_pair(2, 2) },
+    { {0, 0}, {1, 0}, {2, 0} },
+    { {0, 1}, {1, 1}, {2, 1} },
+    { {0, 2}, {1, 2}, {2, 2} },
 
     // Every diagonal
-    { std::make_pair(0, 0), std::make_pair(1, 1), std::make_pair(2, 2) },
-    { std::make_pair(2, 0), std::make_pair(1, 1), std::make_pair(0, 2) }
+    { {0, 0}, {1, 1}, {2, 2} },
+    { {2, 0}, {1, 1}, {0, 2} }
 };
 
 //
@@ -35,7 +35,7 @@ std::vector<std::pair<int, int>> getLegalMoves(std::array<std::array<char, 3>, 3
         {
             if (board[index][subIndex] != AI_MARKER && board[index][subIndex] != PLAYER_MARKER)
             {
-                legalMoves.push_back(std::make_pair(index, subIndex));
+                legalMoves.push_back({index, subIndex});
             } // end if
         } // end for
     } // end for
@@ -74,7 +74,7 @@ std::vector<std::pair<int, int>> getOccupiedPositions(std::array<std::array<char
         {
             if (marker == board[index][subIndex])
             {
-                occupiedPositions.push_back(std::make_pair(index, subIndex));
+                occupiedPositions.push_back({index, subIndex});
             } // end if
         } // end for
     } // end for
@@ -110,7 +110,7 @@ bool gameIsWon(std::vector<std::pair<int, int>> occupiedPositions)
     {
         game_won = true;
         std::vector<std::pair<int, int>> curr_win_state = winningStates[i];
-        for (size_t j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             if (!(std::find(std::begin(occupiedPositions),
                 std::end(occupiedPositions), curr_win_state[j]) != std::end(occupiedPositions)))
@@ -182,14 +182,14 @@ int getBoardState(std::array<std::array<char, 3>, 3> board, char marker)
 std::pair<int, std::pair<int, int>> minimaxOptimization(std::array<std::array<char, 3>, 3> board, char marker, int depth, int alpha, int beta)
 {
     // Initialize best move
-    std::pair<int, int> bestMove = std::make_pair(-1, -1);
+    std::pair<int, int> bestMove = {-1, -1};
     int bestScore = (marker == AI_MARKER) ? static_cast<char>(State::LOSS) : static_cast<char>(State::WIN);
 
     // If we hit a terminal state (leaf node), return the best score and move
     if (boardIsFull(board) || static_cast<int>(State::DRAW) != getBoardState(board, AI_MARKER))
     {
         bestScore = getBoardState(board, AI_MARKER);
-        return std::make_pair(bestScore, bestMove);
+        return {bestScore, bestMove};
     } // end if
 
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
@@ -243,7 +243,7 @@ std::pair<int, std::pair<int, int>> minimaxOptimization(std::array<std::array<ch
 
         // board[currMove.first][currMove.second] = EMPTY_SPACE; // Undo move
     } // end for
-    return std::make_pair(bestScore, bestMove);
+    return {bestScore, bestMove};
 } // end of function minimaxOptimization
 
 //
@@ -287,7 +287,7 @@ void mainExecution()
         std::cin >> col;
         std::cout << std::endl << std::endl;
 
-        if (positionOccupied(board, std::make_pair(row, col)))
+        if (positionOccupied(board, {row, col}))
         {
             std::cout << "The position (" << row << ", " << col << ") is occupied. Try another one..." << std::endl;
             continue;
