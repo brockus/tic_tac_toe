@@ -33,6 +33,128 @@ void test_validOpponentMarker()
 } // end of test case
 
 ///////////////////////////////////////////////////////////////////////////////
+// test_checkGetLegalMoves:
+//
+// Verify getLegalMoves returns the all available and correct legal moves.
+//
+void test_checkGetLegalMoves()
+{
+    std::vector<std::pair<int, int>> legalMoves;
+    std::array<std::array<char, 3>, 3> board = {{
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+
+    //
+    // - - -
+    // - - -
+    // - - -
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(9, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - -
+    // - - -
+    // - - -
+    board[0][0] = PLAYER_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(8, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - -
+    // - O -
+    // - - -
+    board[1][1] = AI_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(7, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - -
+    // - O -
+    // - - X
+    board[2][2] = PLAYER_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(6, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - O
+    // - O -
+    // - - X
+    board[0][2] = AI_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(5, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - O
+    // - O -
+    // X - X
+    board[2][0] = PLAYER_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(4, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - O
+    // O O -
+    // X - X
+    board[1][0] = AI_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(3, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::DRAW), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // X - O
+    // O O -
+    // X X X
+    board[2][1] = PLAYER_MARKER;
+    legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(2, legalMoves.size());
+    TEST_ASSERT_EQUAL(static_cast<int>(State::LOSS), getBoardState(board, AI_MARKER));
+    TEST_ASSERT_EQUAL(static_cast<int>(State::WIN), getBoardState(board, PLAYER_MARKER));
+
+    //
+    // Make sure the two positions are the expected values returned.
+    int numberOfLegalMoves = legalMoves.size();
+
+    for (size_t index = 0; index < legalMoves.size(); ++index)
+    {
+        std::pair<int, int> currMove = legalMoves[index];
+        if (currMove.first == 0)
+        {
+            --numberOfLegalMoves;
+            TEST_ASSERT(currMove.second == 1);
+            break;
+        }
+    }
+
+    for (size_t index = 0; index < legalMoves.size(); ++index)
+    {
+        std::pair<int, int> currMove = legalMoves[index];
+        if (currMove.first == 1)
+        {
+            --numberOfLegalMoves;
+            TEST_ASSERT(currMove.second == 2);
+            break;
+        }
+    }
+
+    TEST_ASSERT(numberOfLegalMoves == 0);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // test_checkPositionOccupied:
 //
 // Verify valid and invalid combinations of calls to positionOccupied

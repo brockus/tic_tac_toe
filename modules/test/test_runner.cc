@@ -16,6 +16,7 @@ extern void tearDown();
  */
 extern void test_validGridChar();
 extern void test_validOpponentMarker();
+extern void test_checkGetLegalMoves();
 extern void test_checkPositionOccupied();
 
 /*
@@ -28,6 +29,7 @@ int main()
 
     RUN_TEST(test_validGridChar);
     RUN_TEST(test_validOpponentMarker);
+    RUN_TEST(test_checkGetLegalMoves);
     RUN_TEST(test_checkPositionOccupied);
 
     return UNITY_END();
