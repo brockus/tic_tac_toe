@@ -36,8 +36,12 @@ const char EMPTY_SPACE = '-';
 const int START_DEPTH = 0;
 
 void mainExecution();
-void printPoard(std::array<std::array<char, 3>, 3> board);
+void printBoard(std::array<std::array<char, 3>, 3> board);
 void printGameState(int state);
 char getOpponentMarker(char marker);
+
+//
+// Testing prototypes
+bool positionOccupied(std::array<std::array<char, 3>, 3> board, std::pair<int, int> pos);
 
 #endif /* TICTACTOE_H_ */

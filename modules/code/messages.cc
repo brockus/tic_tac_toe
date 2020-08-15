@@ -8,7 +8,7 @@
 //
 // Print the current board state
 //
-void printPoard(std::array<std::array<char, 3>, 3> board)
+void printBoard(std::array<std::array<char, 3>, 3> board)
 {
     std::cout << std::endl;
     std::cout << board[0][0] << " | " << board[0][1] << " | " << board[0][2] << std::endl;

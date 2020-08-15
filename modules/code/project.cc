@@ -302,7 +302,7 @@ void mainExecution()
 
         board[aiMove.second.first][aiMove.second.second] = AI_MARKER;
 
-        printPoard(board);
+        printBoard(board);
     } // end while
 
     std::cout << "********** GAME OVER **********" << std::endl << std::endl;
