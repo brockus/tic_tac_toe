@@ -5,6 +5,9 @@
 ![Linux host system](https://github.com/michaelbrockus/tic_tac_toe/workflows/Linux%20host%20system/badge.svg)
 ![Linux Distro Builder](https://github.com/michaelbrockus/tic_tac_toe/workflows/Linux%20Distro%20Builder/badge.svg)
 
+![Code Linter](https://github.com/michaelbrockus/tic_tac_toe/workflows/Code%20Linter/badge.svg)
+![Codacy Badge](https://app.codacy.com/project/badge/Grade/0dc54a4704eb444d93df94fdb6fca360)](https://www.codacy.com/manual/michaelbrockus/tic_tac_toe?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=michaelbrockus/tic_tac_toe&amp;utm_campaign=Badge_Grade)
+
 ## About
 
 Welcome to Tic Tac Tow the game. Player vs harmless dodo bird. This game
