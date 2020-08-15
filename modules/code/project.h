@@ -19,6 +19,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <array>
 #include <cstdlib>
 
 enum class State
@@ -35,7 +36,7 @@ const char EMPTY_SPACE = '-';
 const int START_DEPTH = 0;
 
 void mainExecution();
-void printPoard(char board[3][3]);
+void printPoard(std::array<std::array<char, 3>, 3> board);
 void printGameState(int state);
 char getOpponentMarker(char marker);
 
