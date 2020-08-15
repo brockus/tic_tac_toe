@@ -10,7 +10,7 @@
 
 ## About
 
-Welcome to Tic Tac Tow the game. Player vs harmless dodo bird. This game
+Welcome to Tic Tac Toe the game. Player vs harmless dodo bird. This game
 features a player trying to win a game over a dodo bird, except little
 the player knows that the Dodo bird is a robot.
 
