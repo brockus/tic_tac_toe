@@ -325,3 +325,64 @@ void test_checkGetOccupiedPositions()
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
     TEST_ASSERT_EQUAL(9, legalMoves.size());
 } // end of test case
+
+///////////////////////////////////////////////////////////////////////////////
+// test_checkGameIsDone:
+//
+// Verify gameIsDone returns the correct game completion status.
+//
+void test_checkGameIsDone()
+{
+    std::vector<std::pair<int, int>> positions;
+    std::array<std::array<char, 3>, 3> board;
+
+    //
+    // Empty board is not GameOver
+    board = {{
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    TEST_ASSERT_EQUAL(false, gameIsDone(board));
+
+    //
+    // Full board without a winner is GameOver
+    board = {{
+        {AI_MARKER, PLAYER_MARKER, AI_MARKER},
+        {PLAYER_MARKER, AI_MARKER, PLAYER_MARKER},
+        {PLAYER_MARKER, AI_MARKER, PLAYER_MARKER}
+        }};
+    TEST_ASSERT_EQUAL(true, gameIsDone(board));
+
+    //
+    // Player Win is a GameOver
+    board = {{
+        {PLAYER_MARKER, PLAYER_MARKER, PLAYER_MARKER},
+        {EMPTY_SPACE, AI_MARKER, EMPTY_SPACE},
+        {AI_MARKER, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    TEST_ASSERT_EQUAL(true, gameIsDone(board));
+
+    board = {{
+        {PLAYER_MARKER, AI_MARKER, AI_MARKER},
+        {EMPTY_SPACE, PLAYER_MARKER, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, PLAYER_MARKER}
+        }};
+    TEST_ASSERT_EQUAL(true, gameIsDone(board));
+
+    //
+    // AI Win is a GameOver
+    board = {{
+        {PLAYER_MARKER, EMPTY_SPACE, PLAYER_MARKER},
+        {EMPTY_SPACE, PLAYER_MARKER, EMPTY_SPACE},
+        {AI_MARKER, AI_MARKER, AI_MARKER}
+        }};
+    TEST_ASSERT_EQUAL(true, gameIsDone(board));
+
+    board = {{
+        {PLAYER_MARKER, PLAYER_MARKER, AI_MARKER},
+        {EMPTY_SPACE, AI_MARKER, EMPTY_SPACE},
+        {AI_MARKER, EMPTY_SPACE, PLAYER_MARKER}
+        }};
+    TEST_ASSERT_EQUAL(true, gameIsDone(board));
+} // end of test case
