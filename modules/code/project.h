@@ -45,6 +45,7 @@ char getOpponentMarker(char marker);
 std::vector<std::pair<int, int>> getLegalMoves(std::array<std::array<char, 3>, 3> board);
 bool positionOccupied(std::array<std::array<char, 3>, 3> board, std::pair<int, int> pos);
 std::vector<std::pair<int, int>> getOccupiedPositions(std::array<std::array<char, 3>, 3> board, char marker);
+bool boardIsFull(std::array<std::array<char, 3>, 3> board);
 int getBoardState(std::array<std::array<char, 3>, 3> board, char marker);
 const bool gameIsDone(std::array<std::array<char, 3>, 3> board);
 
