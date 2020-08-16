@@ -379,7 +379,74 @@ void test_checkBoardIsFull()
         {PLAYER_MARKER, AI_MARKER, PLAYER_MARKER}
         }};
     TEST_ASSERT_EQUAL(true, boardIsFull(board));
-}
+} // end of test case
+
+///////////////////////////////////////////////////////////////////////////////
+// test_checkGameIsWon:
+//
+// Verify gameIsWon returns the correct game completion status.
+//
+void test_checkGameIsWon()
+{
+    std::vector<std::pair<int, int>> positions;
+
+    // Empty is not a win
+    positions = {};
+    TEST_ASSERT_EQUAL(false, gameIsWon(positions));
+
+    // Not three in a row is not a win
+    positions = { {0, 0}, {0, 1}, {1, 0}, {2, 2} };
+    TEST_ASSERT_EQUAL(false, gameIsWon(positions));
+    positions = { {0, 0}, {1, 1} };
+    TEST_ASSERT_EQUAL(false, gameIsWon(positions));
+    positions = { {0, 0}, {1, 1}, {2, 0}, {2, 1} };
+    TEST_ASSERT_EQUAL(false, gameIsWon(positions));
+    positions = { {0, 0}, {1, 0}, {2, 1}, {2, 2} };
+    TEST_ASSERT_EQUAL(false, gameIsWon(positions));
+
+    // Every row is a win
+    positions = { {0, 0}, {0, 1}, {0, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {0, 1}, {0, 2}, {1, 0}, {2, 1} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    positions = { {1, 0}, {1, 1}, {1, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {1, 0}, {1, 1}, {1, 2}, {2, 1} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    positions = { {2, 0}, {2, 1}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {0, 1}, {2, 0}, {2, 1}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    // Every column is a win
+    positions = { {0, 0}, {1, 0}, {2, 0} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {0, 1}, {1, 0}, {2, 0}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    positions = { {0, 1}, {1, 1}, {2, 1} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 1}, {0, 2}, {1, 1}, {2, 1}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    positions = { {0, 2}, {1, 2}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {0, 2}, {1, 2}, {2, 0}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    // Every diagonal is a win
+    positions = { {0, 0}, {1, 1}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {0, 2}, {1, 0}, {1, 1}, {2, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+
+    positions = { {2, 0}, {1, 1}, {0, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+    positions = { {0, 0}, {2, 0}, {2, 1}, {1, 1}, {0, 2} };
+    TEST_ASSERT_EQUAL(true, gameIsWon(positions));
+} // end of test case
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_checkGameIsDone:
@@ -388,7 +455,6 @@ void test_checkBoardIsFull()
 //
 void test_checkGameIsDone()
 {
-    std::vector<std::pair<int, int>> positions;
     std::array<std::array<char, 3>, 3> board;
 
     //
