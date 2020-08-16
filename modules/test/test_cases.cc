@@ -327,6 +327,61 @@ void test_checkGetOccupiedPositions()
 } // end of test case
 
 ///////////////////////////////////////////////////////////////////////////////
+// test_checkBoardIsFull:
+//
+// Verify boardIsFull returns the correct board status.
+//
+void test_checkBoardIsFull()
+{
+    std::array<std::array<char, 3>, 3> board;
+
+    //
+    // Empty board is not full
+    board = {{
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    TEST_ASSERT_EQUAL(false, boardIsFull(board));
+
+    //
+    // DRAW board with empty position is not full
+    board = {{
+        {AI_MARKER, AI_MARKER, PLAYER_MARKER},
+        {PLAYER_MARKER, PLAYER_MARKER, AI_MARKER},
+        {PLAYER_MARKER, AI_MARKER, EMPTY_SPACE}
+        }};
+    TEST_ASSERT_EQUAL(false, boardIsFull(board));
+
+    //
+    // AI WIN board with empty position is not full
+    board = {{
+        {AI_MARKER, AI_MARKER, AI_MARKER},
+        {PLAYER_MARKER, PLAYER_MARKER, EMPTY_SPACE},
+        {PLAYER_MARKER, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    TEST_ASSERT_EQUAL(false, boardIsFull(board));
+
+    //
+    // PLAYER WIN board with empty position is not full
+    board = {{
+        {AI_MARKER, EMPTY_SPACE, PLAYER_MARKER},
+        {AI_MARKER, PLAYER_MARKER, EMPTY_SPACE},
+        {PLAYER_MARKER, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    TEST_ASSERT_EQUAL(false, boardIsFull(board));
+
+    //
+    // Full board is full
+    board = {{
+        {AI_MARKER, AI_MARKER, PLAYER_MARKER},
+        {PLAYER_MARKER, PLAYER_MARKER, AI_MARKER},
+        {PLAYER_MARKER, AI_MARKER, PLAYER_MARKER}
+        }};
+    TEST_ASSERT_EQUAL(true, boardIsFull(board));
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // test_checkGameIsDone:
 //
 // Verify gameIsDone returns the correct game completion status.

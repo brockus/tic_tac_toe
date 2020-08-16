@@ -19,6 +19,7 @@ extern void test_validOpponentMarker();
 extern void test_checkGetLegalMoves();
 extern void test_checkPositionOccupied();
 extern void test_checkGetOccupiedPositions();
+extern void test_checkBoardIsFull();
 extern void test_checkGameIsDone();
 
 /*
@@ -34,6 +35,7 @@ int main()
     RUN_TEST(test_checkGetLegalMoves);
     RUN_TEST(test_checkPositionOccupied);
     RUN_TEST(test_checkGetOccupiedPositions);
+    RUN_TEST(test_checkBoardIsFull);
     RUN_TEST(test_checkGameIsDone);
 
     return UNITY_END();
