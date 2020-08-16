@@ -35,7 +35,7 @@ void test_validOpponentMarker()
 ///////////////////////////////////////////////////////////////////////////////
 // test_checkGetLegalMoves:
 //
-// Verify getLegalMoves returns the all available and correct legal moves.
+// Verify getLegalMoves returns the available and correct legal moves.
 //
 void test_checkGetLegalMoves()
 {
@@ -152,7 +152,7 @@ void test_checkGetLegalMoves()
     }
 
     TEST_ASSERT(numberOfLegalMoves == 0);
-}
+} // end of test case
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_checkPositionOccupied:
@@ -209,4 +209,119 @@ void test_checkPositionOccupied()
     TEST_ASSERT_EQUAL(true, positionOccupied(board, {1, 3}));
     TEST_ASSERT_EQUAL(true, positionOccupied(board, {3, 1}));
     TEST_ASSERT_EQUAL(true, positionOccupied(board, {3, 3}));
+} // end of test case
+
+///////////////////////////////////////////////////////////////////////////////
+// test_checkGetOccupiedPositions:
+//
+// Verify getOccupiedPositions returns the correct occupied locations.
+//
+void test_checkGetOccupiedPositions()
+{
+    std::vector<std::pair<int, int>> positions;
+    std::array<std::array<char, 3>, 3> board = {{
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+
+    //
+    // - - -
+    // - - -
+    // - - -
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 0);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 0);
+
+    //
+    // X - -
+    // - - -
+    // - - -
+    board[0][0] = PLAYER_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 0);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 1);
+
+    //
+    // X - -
+    // - O -
+    // - - -
+    board[1][1] = AI_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 1);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 1);
+
+    //
+    // X - -
+    // - O -
+    // - - X
+    board[2][2] = PLAYER_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 1);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 2);
+
+    //
+    // X - O
+    // - O -
+    // - - X
+    board[0][2] = AI_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 2);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 2);
+
+    //
+    // X - O
+    // - O -
+    // X - X
+    board[2][0] = PLAYER_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 2);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 3);
+
+    //
+    // X - O
+    // O O -
+    // X - X
+    board[1][0] = AI_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 3);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 3);
+
+    //
+    // X - O
+    // O O -
+    // X X X
+    board[2][1] = PLAYER_MARKER;
+    positions = getOccupiedPositions(board, AI_MARKER);
+    TEST_ASSERT(positions.size() == 3);
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    TEST_ASSERT(positions.size() == 4);
+
+    //
+    // Verify we are getting the actual positions
+    positions = getOccupiedPositions(board, AI_MARKER);
+    for (size_t index = 0; index < positions.size(); ++index)
+    {
+        std::pair<int, int> currPosition = positions[index];
+        TEST_ASSERT(board[currPosition.first][currPosition.second] == AI_MARKER);
+        board[currPosition.first][currPosition.second] = EMPTY_SPACE;
+    }
+
+    positions = getOccupiedPositions(board, PLAYER_MARKER);
+    for (size_t index = 0; index < positions.size(); ++index)
+    {
+        std::pair<int, int> currPosition = positions[index];
+        TEST_ASSERT(board[currPosition.first][currPosition.second] == PLAYER_MARKER);
+        board[currPosition.first][currPosition.second] = EMPTY_SPACE;
+    }
+
+    std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
+    TEST_ASSERT_EQUAL(9, legalMoves.size());
 } // end of test case

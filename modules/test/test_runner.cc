@@ -18,6 +18,7 @@ extern void test_validGridChar();
 extern void test_validOpponentMarker();
 extern void test_checkGetLegalMoves();
 extern void test_checkPositionOccupied();
+extern void test_checkGetOccupiedPositions();
 
 /*
  *  This function runs test from the external test
@@ -31,6 +32,7 @@ int main()
     RUN_TEST(test_validOpponentMarker);
     RUN_TEST(test_checkGetLegalMoves);
     RUN_TEST(test_checkPositionOccupied);
+    RUN_TEST(test_checkGetOccupiedPositions);
 
     return UNITY_END();
 } //end of function main
