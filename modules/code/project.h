@@ -46,5 +46,6 @@ std::vector<std::pair<int, int>> getLegalMoves(std::array<std::array<char, 3>, 3
 bool positionOccupied(std::array<std::array<char, 3>, 3> board, std::pair<int, int> pos);
 std::vector<std::pair<int, int>> getOccupiedPositions(std::array<std::array<char, 3>, 3> board, char marker);
 int getBoardState(std::array<std::array<char, 3>, 3> board, char marker);
+const bool gameIsDone(std::array<std::array<char, 3>, 3> board);
 
 #endif /* TICTACTOE_H_ */
