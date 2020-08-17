@@ -200,17 +200,9 @@ static std::pair<int, std::pair<int, int>> minimax(std::array<std::array<char, 3
 
     //
     // If we have no more moves to make then return a WIN, LOSE or DRAW value.
-    if (boardState == static_cast<int>(State::WIN))
+    if ((legalMoves.size() == 0) || (boardState != static_cast<int>(State::DRAW)))
     {
-        return {static_cast<int>(State::WIN), bestMove};
-    }
-    else if (boardState == static_cast<int>(State::LOSS))
-    {
-        return {static_cast<int>(State::LOSS), bestMove};
-    }
-    else if (legalMoves.size() == 0)
-    {
-        return {static_cast<int>(State::DRAW), bestMove};
+        return {boardState, bestMove};
     }
 
     //
