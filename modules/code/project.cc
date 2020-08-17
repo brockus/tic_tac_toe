@@ -179,72 +179,99 @@ int getBoardState(std::array<std::array<char, 3>, 3> board, char marker)
 //
 // Apply the minimax game optimization algorithm
 //
-std::pair<int, std::pair<int, int>> minimaxOptimization(std::array<std::array<char, 3>, 3> board, char marker, int depth, int alpha, int beta)
+static std::pair<int, std::pair<int, int>> minimax(std::array<std::array<char, 3>, 3> board, char optForMarker, bool isMax)
 {
+    //
     // Initialize best move
     std::pair<int, int> bestMove = {-1, -1};
-    int bestScore = (marker == AI_MARKER) ? static_cast<char>(State::LOSS) : static_cast<char>(State::WIN);
 
-    // If we hit a terminal state (leaf node), return the best score and move
-    if (boardIsFull(board) || static_cast<int>(State::DRAW) != getBoardState(board, AI_MARKER))
-    {
-        bestScore = getBoardState(board, AI_MARKER);
-        return {bestScore, bestMove};
-    } // end if
-
+    //
+    // Get a list of the empty board locations.
     std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
 
+    //
+    // Determine which marker we are working with based on the number of
+    // empty spaces... An odd number indicates it is the PLAYER's turn.
+    char marker = (legalMoves.size() & 1) ? PLAYER_MARKER : AI_MARKER;
+
+    //
+    // Get the current state of the board from the marker we are optimizing for.
+    int boardState = getBoardState(board, optForMarker);
+
+    //
+    // If we have no more moves to make then return a WIN, LOSE or DRAW value.
+    if (boardState == static_cast<int>(State::WIN))
+    {
+        return {static_cast<int>(State::WIN), bestMove};
+    }
+    else if (boardState == static_cast<int>(State::LOSS))
+    {
+        return {static_cast<int>(State::LOSS), bestMove};
+    }
+    else if (legalMoves.size() == 0)
+    {
+        return {static_cast<int>(State::DRAW), bestMove};
+    }
+
+    //
+    // Start with the value furthest away from what we want to find.
+    int bestScore = isMax ? INT32_MIN : INT32_MAX;
+
+    //
+    // Go through all of the open positions and see how they score.
     for (size_t index = 0; index < legalMoves.size(); ++index)
     {
+        //
+        // Set the current location, score it and then restore as empty.
         std::pair<int, int> currMove = legalMoves[index];
         board[currMove.first][currMove.second] = marker;
+        int newScore = minimax(board, optForMarker, !isMax).first;
+        board[currMove.first][currMove.second] = EMPTY_SPACE;
 
-        // Maximizing player's turn
-        if (marker == AI_MARKER)
+        //
+        // Track the appropriate MAX or MIN score. Short circuit the
+        // loop if we get what we were looking for.
+        if (isMax)
         {
-            int score = minimaxOptimization(board, PLAYER_MARKER, depth + 1, alpha, beta).first;
-
-            // Get the best scoring move
-            if (bestScore < score)
+            if (newScore > bestScore)
             {
-                bestScore = score - depth * 10;
                 bestMove = currMove;
-
-                // Check if this branch's best move is worse than the best
-                // option of a previously search branch. If it is, skip it
-                alpha = std::max(alpha, bestScore);
-                board[currMove.first][currMove.second] = EMPTY_SPACE;
-                if (beta <= alpha)
+                bestScore = newScore;
+                if (bestScore == static_cast<int>(State::WIN))
                 {
                     break;
-                }  // end if
-            }  // end if
-
-        }  // end if 
-        else // Minimizing opponent's turn
+                }
+            }
+        }
+        else
         {
-            int score = minimaxOptimization(board, AI_MARKER, depth + 1, alpha, beta).first;
-
-            if (bestScore > score)
+            if (newScore < bestScore)
             {
-                bestScore = score + depth * 10;
                 bestMove = currMove;
-
-                // Check if this branch's best move is worse than the best
-                // option of a previously search branch. If it is, skip it
-                beta = std::min(beta, bestScore);
-                board[currMove.first][currMove.second] = EMPTY_SPACE;
-                if (beta <= alpha)
+                bestScore = newScore;
+                if (bestScore == static_cast<int>(State::LOSS))
                 {
                     break;
-                } // end if
-            } // end if
-        } // end else
-
-        // board[currMove.first][currMove.second] = EMPTY_SPACE; // Undo move
-    } // end for
+                }
+            }
+        }
+    }
     return {bestScore, bestMove};
-} // end of function minimaxOptimization
+}
+
+std::pair<int, int> findBestMove(std::array<std::array<char, 3>, 3> board)
+{
+    //
+    // Get a list of the empty board locations.
+    std::vector<std::pair<int, int>> legalMoves = getLegalMoves(board);
+
+    //
+    // Determine which marker we are working with based on the number of
+    // empty spaces... An odd number indicates it is the PLAYER's turn.
+    char marker = (legalMoves.size() & 1) ? PLAYER_MARKER : AI_MARKER;
+
+    return minimax(board, marker, true).second;
+}
 
 //
 // Check if the game is finished
@@ -270,7 +297,7 @@ const bool gameIsDone(std::array<std::array<char, 3>, 3> board)
 void mainExecution()
 {
     std::array<std::array<char, 3>, 3> board = {{
-        { EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
         {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE},
         {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
         }};
@@ -297,10 +324,8 @@ void mainExecution()
             board[row][col] = PLAYER_MARKER;
         } // end else
 
-        std::pair<int, std::pair<int, int>> aiMove = minimaxOptimization(board, AI_MARKER, START_DEPTH,
-            static_cast<int>(State::LOSS), static_cast<int>(State::WIN));
-
-        board[aiMove.second.first][aiMove.second.second] = AI_MARKER;
+        std::pair<int, int> aiMove = findBestMove(board);
+        board[aiMove.first][aiMove.second] = AI_MARKER;
 
         printBoard(board);
     } // end while
