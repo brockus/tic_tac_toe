@@ -510,6 +510,70 @@ void test_checkGetBoardState()
 } // end of test case
 
 ///////////////////////////////////////////////////////////////////////////////
+// test_checkFindBestMove:
+//
+// Verify findBestMove returns a good next position choice for either player
+//
+void test_checkFindBestMove()
+{
+    std::pair<int, int> nextMove;
+    std::array<std::array<char, 3>, 3> board;
+
+    board = {{
+        {PLAYER_MARKER, EMPTY_SPACE, EMPTY_SPACE},
+        {EMPTY_SPACE, AI_MARKER, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, PLAYER_MARKER}
+        }};
+    nextMove = findBestMove(board);
+    std::cout << "chose " << nextMove.first << "," << nextMove.second << std::endl;
+    TEST_ASSERT((nextMove.first == 0 && nextMove.second == 1) ||
+                (nextMove.first == 1 && nextMove.second == 0) ||
+                (nextMove.first == 1 && nextMove.second == 2) ||
+                (nextMove.first == 2 && nextMove.second == 1));
+
+    board = {{
+        {PLAYER_MARKER, AI_MARKER, EMPTY_SPACE},
+        {EMPTY_SPACE, AI_MARKER, EMPTY_SPACE},
+        {EMPTY_SPACE, EMPTY_SPACE, PLAYER_MARKER}
+        }};
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 2 && nextMove.second == 1);
+    board[nextMove.first][nextMove.second] = PLAYER_MARKER;
+
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 2 && nextMove.second == 0);
+    board[nextMove.first][nextMove.second] = AI_MARKER;
+
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 0 && nextMove.second == 2);
+    board[nextMove.first][nextMove.second] = PLAYER_MARKER;
+
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 1 && nextMove.second == 2);
+    board[nextMove.first][nextMove.second] = AI_MARKER;
+
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 1 && nextMove.second == 0);
+    board[nextMove.first][nextMove.second] = PLAYER_MARKER;
+
+    board = {{
+        {PLAYER_MARKER, AI_MARKER, PLAYER_MARKER},
+        {AI_MARKER, AI_MARKER, PLAYER_MARKER},
+        {EMPTY_SPACE, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 2 && nextMove.second == 2);
+
+    board = {{
+        {PLAYER_MARKER, AI_MARKER, PLAYER_MARKER},
+        {AI_MARKER, AI_MARKER, PLAYER_MARKER},
+        {PLAYER_MARKER, EMPTY_SPACE, EMPTY_SPACE}
+        }};
+    nextMove = findBestMove(board);
+    TEST_ASSERT(nextMove.first == 2 && nextMove.second == 1);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // test_checkGameIsDone:
 //
 // Verify gameIsDone returns the correct game completion status.
