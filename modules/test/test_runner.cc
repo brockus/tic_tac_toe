@@ -22,6 +22,7 @@ extern void test_checkGetOccupiedPositions();
 extern void test_checkBoardIsFull();
 extern void test_checkGameIsWon();
 extern void test_checkGetBoardState();
+extern void test_checkFindBestMove();
 extern void test_checkGameIsDone();
 
 /*
@@ -40,6 +41,7 @@ int main()
     RUN_TEST(test_checkBoardIsFull);
     RUN_TEST(test_checkGameIsWon);
     RUN_TEST(test_checkGetBoardState);
+    RUN_TEST(test_checkFindBestMove);
     RUN_TEST(test_checkGameIsDone);
 
     return UNITY_END();
