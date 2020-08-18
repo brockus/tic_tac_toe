@@ -29,13 +29,13 @@ std::vector<std::vector<std::pair<int, int>>> winningStates
 std::vector<std::pair<int, int>> getLegalMoves(std::array<std::array<char, 3>, 3> board)
 {
     std::vector<std::pair<int, int>> legalMoves;
-    for (size_t index = 0; index < 3; ++index)
+    for (size_t row = 0; row < 3; ++row)
     {
-        for (size_t subIndex = 0; subIndex < 3; ++subIndex)
+        for (size_t col = 0; col < 3; ++col)
         {
-            if (board[index][subIndex] != AI_MARKER && board[index][subIndex] != PLAYER_MARKER)
+            if (board[row][col] != AI_MARKER && board[row][col] != PLAYER_MARKER)
             {
-                legalMoves.push_back({index, subIndex});
+                legalMoves.push_back({row, col});
             } // end if
         } // end for
     } // end for
@@ -68,13 +68,13 @@ std::vector<std::pair<int, int>> getOccupiedPositions(std::array<std::array<char
 {
     std::vector<std::pair<int, int>> occupiedPositions;
 
-    for (size_t index = 0; index < 3; ++index)
+    for (size_t row = 0; row < 3; ++row)
     {
-        for (size_t subIndex = 0; subIndex < 3; ++subIndex)
+        for (size_t col = 0; col < 3; ++col)
         {
-            if (marker == board[index][subIndex])
+            if (marker == board[row][col])
             {
-                occupiedPositions.push_back({index, subIndex});
+                occupiedPositions.push_back({row, col});
             } // end if
         } // end for
     } // end for
@@ -106,14 +106,15 @@ bool gameIsWon(std::vector<std::pair<int, int>> occupiedPositions)
 {
     bool game_won;
 
-    for (size_t i = 0; i < winningStates.size(); i++)
+    for (size_t winIndex = 0; winIndex < winningStates.size(); winIndex++)
     {
         game_won = true;
-        std::vector<std::pair<int, int>> curr_win_state = winningStates[i];
-        for (int j = 0; j < 3; j++)
+        std::vector<std::pair<int, int>> curr_win_state = winningStates[winIndex];
+        for (int index = 0; index < 3; index++)
         {
             if (!(std::find(std::begin(occupiedPositions),
-                std::end(occupiedPositions), curr_win_state[j]) != std::end(occupiedPositions)))
+                            std::end(occupiedPositions),
+                            curr_win_state[index]) != std::end(occupiedPositions)))
             {
                 game_won = false;
                 break;
